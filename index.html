@@ -52,7 +52,7 @@
 					<section>
 						<h2>What</h2>
 						<p class="fragment">secured RESTful API</p>
-						<p class="fragment">proven infrastructure underneath</p>
+						<p class="fragment">underlying infrastructure underneath</p>
 						<p class="fragment">event type registry</p>
 						<p class="fragment">compatibility with STUPS</p>
 					</section>
@@ -76,38 +76,38 @@
 						<h2>Terminology</h2>
 						<div style="text-align: left;">
 							<p class="fragment"><strong>event</strong></p>
-							<p><span class="fragment"><strong>event type</strong></span><span class="fragment"> - similar to topic in MQ - channel for communication</p></span>
+							<p><span class="fragment"><strong>event type</strong></span><span class="fragment"> - similar to topic in MQ, channel for communication</p></span>
 							<p><span class="fragment"><strong>producer</strong></span><span class="fragment"> - one who is publishing an event to an event type</p></span>
-							<p><span class="fragment"><strong>consumer</strong></span><span class="fragment"> - one who is listening on an event type and get notified when an event occur</p></span>
-							<p><span class="fragment"><strong>offset</strong></span><span class="fragment"> - from which point to start consuming events</p></span>
+							<p><span class="fragment"><strong>consumer</strong></span><span class="fragment"> - one who is listening on an event type and gets notified when an event occurs</p></span>
+							<p><span class="fragment"><strong>offset</strong></span><span class="fragment"> - point from which to start consuming events</p></span>
 							<p><span class="fragment"><strong>partition</strong></span><span class="fragment"> - not needed at the moment!</p></span>
 						</div>
 					</section>
 					<section>
 						<h2>Challenge</h2>
-						<p class="fragment">As a consumer we want to be notified when an event occur (in real-time).</p>
+						<p class="fragment">As consumers we want to be notified when an event occurs (in real-time).</p>
 					</section>
 					<section>
 						<h2>Challenge</h2>
 						<img src="resources/Nakadi - blackbox - 4.png" style="position:relative;display:block;width:100%;margin:0;padding:0;border:none;max-width:100%;max-height:100%"/>
 					</section>
 					<section>
-						<h2 class="fragment">Tow solutions</h2>
+						<h2>Two solutions</h2>
 						<p class="fragment">Low-level API</p>
 						<p class="fragment">High-level API</p>
 					</section>
 					<section>
 						<h2>Low-level</h2>
-						<p class="fragment">A consumer sends HTTP request on a specific event type</p>
+						<p class="fragment">A consumer sends an HTTP request on a specific event type</p>
 						<p class="fragment">Nakadi does not respond...</p>
-						<p class="fragment">...but instead sends an event when it occurs</p>
+						<p class="fragment">...but instead sends an event as it occurs</p>
 						<p class="fragment">HTTP connection "never" closes</p>
 					</section>
 					<section>
-						<h2>High-Level (subscription API)</h2>
-						<p class="fragment">A consumer subscribes to specific event type...</p>
+						<h2>Subscription API (High-Level)</h2>
+						<p class="fragment">A consumer subscribes to a specific event type...</p>
 						<p class="fragment">...providing a callback API</p>
-						<p class="fragment">An event occurs and callback API is called where event is POSTed</p>
+						<p class="fragment">An event occurs and is POSTed on the callback API</p>
 					</section>
 					<section>
 						<h2>Current status</h2>
@@ -173,7 +173,7 @@ curl -v -X GET https://nakadi-staging.aruha-test.zalan.do/event-types/brand-solu
 curl -v -X POST https://nakadi-staging.aruha-test.zalan.do/event-types/brand-solutions.test/events \
   --header "Authorization: Bearer your-zign-token-here" \
   --header "Content-Type:application/json" \
-  -d '[]'
+  -d '[{"foo": "bar"}]'
 						</code></pre>
 					</section>
 					<section>
@@ -188,7 +188,7 @@ curl -v -X GET https://nakadi-staging.aruha-test.zalan.do/event-types/brand-solu
 					<section>
 						<h2>Nakadi inspector</h2>
 						<p class="fragment">Nikita did 5-minute-prototype-jQuery project</p>
-						<p class="fragment"><a href="https://github.bus.zalan.do/nmelkozerov/nakadi-inspector">Nakadi inspektor</a></p>
+						<p class="fragment">Inner-source: <a href="https://github.bus.zalan.do/nmelkozerov/nakadi-inspector">Nakadi inspector</a></p>
 						<p class="fragment">DEMO</p>
 					</section>
 					<section>
