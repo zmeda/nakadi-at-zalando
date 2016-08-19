@@ -3,8 +3,9 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<meta name="description" content="Nakadi @ Zalando - Why? What? How?">
 
-		<title>reveal.js</title>
+		<title>nakadi-at-zalando</title>
 
 		<link rel="stylesheet" href="css/reveal.css">
 		<link rel="stylesheet" href="css/theme/black.css">
@@ -24,8 +25,182 @@
 	<body>
 		<div class="reveal">
 			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
+				<section>
+					<h1>Nakadi @ Zalando</h1>
+					<h6>team RAY</h6>
+					<p><a href="https://twitter.com/zmeda">@zmeda</a></p>
+				</section>
+				<section>
+					<img src="resources/OneDoesNotSimplyUseNakadi.jpg" style="position:relative;display:block;width:100%;margin:0;padding:0;border:none;max-width:100%;max-height:100%"/>
+				</section>
+				<section>
+					<section>
+						<h2>Why</h2>
+						<p class="fragment">async microservices communication</p>
+						<p class="fragment">event-driven</p>
+						<p class="fragment">REST oriented</p>
+						<p class="fragment">reliability</p>
+						<p class="fragment">responsibility</p>
+					</section>
+					<section>
+						<h2>Centralised event bus for Zalando</h2>
+						<p class="fragment">all events are transported via Nakadi</p>
+						<p class="fragment">tooling and analysis on top</p>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>What</h2>
+						<p class="fragment">secured RESTful API</p>
+						<p class="fragment">underlying infrastructure is proven and well-known</p>
+						<p class="fragment">event type registry</p>
+						<p class="fragment">compatibility with STUPS</p>
+					</section>
+					<section>
+						<h2>Everything is REST</h2>
+						<img src="resources/Nakadi - blackbox - 1.png" style="position:relative;display:block;width:100%;margin:0;padding:0;border:none;max-width:100%;max-height:100%"/>
+					</section>
+					<section>
+						<h2>Underlying infrastructure</h2>
+						<img src="resources/Nakadi - blackbox - 2.png" style="position:relative;display:block;width:100%;margin:0;padding:0;border:none;max-width:100%;max-height:100%"/>
+					</section>
+					<section>
+						<h2>Underlying infrastructure</h2>
+						<img src="resources/Nakadi - blackbox - 3.png" style="position:relative;display:block;width:100%;margin:0;padding:0;border:none;max-width:100%;max-height:100%"/>
+					</section>
+					<section>
+						<h2>Underlying infrastructure</h2>
+						<img src="resources/Nakadi - blackbox - 5.png" style="position:relative;display:block;width:100%;margin:0;padding:0;border:none;max-width:100%;max-height:100%"/>
+					</section>
+					<section>
+						<h2>Terminology</h2>
+						<div style="text-align: left;">
+							<p class="fragment"><strong>event</strong></p>
+							<p><span class="fragment"><strong>event type</strong></span><span class="fragment"> - similar to topic in MQ, channel for communication</p></span>
+							<p><span class="fragment"><strong>producer</strong></span><span class="fragment"> - one who is publishing an event to an event type</p></span>
+							<p><span class="fragment"><strong>consumer</strong></span><span class="fragment"> - one who is listening on an event type and gets notified when an event occurs</p></span>
+							<p><span class="fragment"><strong>offset</strong></span><span class="fragment"> - point from which to start consuming events</p></span>
+							<p><span class="fragment"><strong>partition</strong></span><span class="fragment"> - not needed at the moment!</p></span>
+						</div>
+					</section>
+					<section>
+						<h2>Challenge</h2>
+						<p class="fragment">As consumers we want to be notified when an event occurs (in real-time).</p>
+					</section>
+					<section>
+						<h2>Challenge</h2>
+						<img src="resources/Nakadi - blackbox - 4.png" style="position:relative;display:block;width:100%;margin:0;padding:0;border:none;max-width:100%;max-height:100%"/>
+					</section>
+					<section>
+						<h2>Two solutions</h2>
+						<p class="fragment">Low-level API</p>
+						<p class="fragment">High-level API</p>
+					</section>
+					<section>
+						<h2>Low-level</h2>
+						<p class="fragment">A consumer sends an HTTP request on a specific event type</p>
+						<p class="fragment">Nakadi does not respond...</p>
+						<p class="fragment">...but instead sends an event as it occurs</p>
+						<p class="fragment">HTTP connection "never" closes</p>
+					</section>
+					<section>
+						<h2>Subscription API (High-Level)</h2>
+						<p class="fragment">A consumer subscribes to a specific event type...</p>
+						<p class="fragment">...providing a callback API</p>
+						<p class="fragment">An event occurs and is POSTed on the callback API</p>
+					</section>
+					<section>
+						<h2>Current status</h2>
+						<p class="fragment">Low-Level API - implemented (and later demoed)</p>
+						<p class="fragment">Subscription API - under construction</p>
+						<p class="fragment">Event filtering - yet to come</p>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>How to use nakadi</h2>
+						<p class="fragment">Prerequisites</p>
+						<p class="fragment">Create a new event type</p>
+						<p class="fragment">Connect to consume an event on newly created type</p>
+						<p class="fragment">Produce an event on newly created type</p>
+						<p class="fragment">Offset in practice</p>
+						<p class="fragment">Nakadi inspector</p>
+						<p class="fragment">Backend libraries</p>
+					</section>
+					<section>
+						<h2>Prerequisites</h2>
+						<p><a href="https://stups.io/">STUPS installed</a></p>
+						<p>Your favorite HTTP crawler (curl, http, postman, etc.)</p>
+					</section>
+					<section>
+						<h2>Create a new event type</h2>
+						<pre><code class="bash" style="font-size: 14px;">
+curl -v -X POST https://nakadi-staging.aruha-test.zalan.do/event-types \
+  --header "Authorization: Bearer your-zign-token-here" \
+  --header "Content-Type:application/json" \
+  -d '{
+    "name": "brand-solutions.test",
+    "owning_application": "bs.test",
+    "category": "undefined",
+    "partition_strategy": "random",
+    "schema": {
+      "type": "json_schema",
+      "schema": "{ \"additionalProperties\": true }"
+    }
+  }'
+						</code></pre>
+					</section>
+					<section>
+						<h2>Check if the event type was created</h2>
+						<pre><code class="bash" style="font-size: 14px;">
+curl -v -X GET https://nakadi-staging.aruha-test.zalan.do/event-types/brand-solutions.test \
+  --header "Authorization: Bearer your-zign-token-here" \
+  --header "Content-Type:application/json"
+  						</code></pre>
+  					</section>
+					<section>
+						<h2>Connect to consume an event on newly created type</h2>
+						<pre><code class="bash" style="font-size: 14px;">
+curl -v -X GET https://nakadi-staging.aruha-test.zalan.do/event-types/brand-solutions.test/events \
+  --header "Authorization: Bearer your-zign-token-here" \
+  --header "Content-Type:application/json" \
+  --header 'X-Nakadi-Cursors:[{"partition": "0", "offset":"BEGIN"}]'
+						</code></pre>
+					</section>
+					<section>
+						<h2>Produce an event on newly created type</h2>
+						<pre><code class="bash" style="font-size: 14px;">
+curl -v -X POST https://nakadi-staging.aruha-test.zalan.do/event-types/brand-solutions.test/events \
+  --header "Authorization: Bearer your-zign-token-here" \
+  --header "Content-Type:application/json" \
+  -d '[{"foo": "bar"}]'
+						</code></pre>
+					</section>
+					<section>
+						<h2>Offset in practice</h2>
+						<pre><code class="bash" style="font-size: 14px;">
+curl -v -X GET https://nakadi-staging.aruha-test.zalan.do/event-types/brand-solutions.test/events \
+  --header "Authorization: Bearer your-zign-token-here" \
+  --header "Content-Type:application/json" \
+  --header 'X-Nakadi-Cursors:[{"partition": "0", "offset":"10"}]'
+						</code></pre>
+					</section>
+					<section>
+						<h2>Nakadi inspector</h2>
+						<p class="fragment">Nikita did 5-minute-prototype-jQuery project</p>
+						<p class="fragment">Inner-source: <a href="https://github.bus.zalan.do/nmelkozerov/nakadi-inspector">Nakadi inspector</a></p>
+						<p class="fragment">DEMO</p>
+					</section>
+					<section>
+						<h2>Backend libraries</h2>
+						<p><a href="https://github.bus.zalan.do/kohle/reactive-nakadi-client">Reactive Nakadi</a></p>
+						<p><a href="https://github.com/zalando-incubator/nakadi-klients">Nakadi Klients</a></p>
+						<p><a href="https://github.com/zalando-incubator/fahrschein">Fahrschein</a></p>
+					</section>
+				</section>
+				<section>
+					<img src="resources/OneDoesNotSimplyUseNakadi.jpg" style="position:relative;display:block;width:100%;margin:0;padding:0;border:none;max-width:100%;max-height:100%"/>
+				</section>
 			</div>
 		</div>
 
